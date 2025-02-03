@@ -9,10 +9,7 @@ function closeModalHistory() {
 }
 
 function handleModalToggle() {
-    let modalInstance = bootstrap.Modal.getInstance(
-        document.getElementById("modalWindow")
-    );
-
+    let modalInstance = bootstrap.Modal.getInstance(document.getElementById("modalWindow"));
     if (window.location.hash.match(/^#popup$/)) {
         modalInstance.show();
     } else {
@@ -22,6 +19,7 @@ function handleModalToggle() {
 
 function processFormSubmission(event) {
     event.preventDefault();
+
     if (!document.querySelector("form").reportValidity()) {
         return;
     }
@@ -38,6 +36,7 @@ function processFormSubmission(event) {
     });
 
     xhrRequest.send(JSON.stringify(formData));
+
     xhrRequest.onreadystatechange = function () {
         if (this.readyState === 4) {
             let responseMessage = document.querySelector(".feedbackMessage");
@@ -46,11 +45,11 @@ function processFormSubmission(event) {
                 inputElements.forEach(function (input) {
                     input.value = "";
                 });
-                window.localStorage.clear();
+                window.localStorage.clear(); // Clear stored data after submission
             } else {
                 responseMessage.innerHTML = "An error occurred. Please try again.";
             }
-            closeModalHistory();
+            closeModalHistory(); // Close modal after form submission
         }
     };
 }
@@ -65,10 +64,12 @@ window.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("openModalButton")
         .addEventListener("click", openModalHistory);
+
     document.getElementById("closeModalButton")
         .addEventListener("click", closeModalHistory);
 
     window.addEventListener("popstate", handleModalToggle);
+
     document.addEventListener("keydown", function (e) {
         if (e.key === "Escape" && window.location.hash.match(/^#popup$/)) {
             closeModalHistory();
